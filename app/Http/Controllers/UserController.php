@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUpdateUseFormRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -21,14 +22,14 @@ class UserController extends Controller
         if(!$user = User::find($id))
             return redirect()->route('users.index');
         return view('users.show', compact('user'));
-        dd('users.show', $id);
+        // dd('users.show', $id);
     }
 
     public function create(){
         return view('users.create');
     }
 
-    public function store(Request $request){
+    public function store(StoreUpdateUseFormRequest $request){
         $data = $request->all();
         $data['password'] = bcrypt($request->password);
         
@@ -43,4 +44,25 @@ class UserController extends Controller
         // $user->password = $request->password;
         // $user->save();
     }
+
+    public function edit($id){
+        if(!$user = User::find($id))
+            return redirect()->route('users.index');
+        return view('users.edit', compact('user'));
+
+    }
+
+    public function update(StoreUpdateUseFormRequest $request, $id){
+        if(!$user = User::find($id))
+            return redirect()->route('users.index');
+        $data = $request->only('name', 'email');
+        if($request->password)
+            $data['password'] = bcrypt($request->password);
+
+        $user->update($data);
+        return redirect()->route('users.index');    
+
+    }
+
+
 }
