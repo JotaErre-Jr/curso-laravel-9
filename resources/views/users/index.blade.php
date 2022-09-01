@@ -3,7 +3,10 @@
 @section('title', 'listagem dos Usuários')
 
 @section('content')
-<h1>Listagem dos usuários</h1>
+<h1>
+    Listagem dos usuários
+    (<a href="{{route('users.create')}}">+</a>)
+</h1>
 
 <ul>
     @foreach($user as $user)
